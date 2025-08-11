@@ -1,0 +1,11 @@
+
+bulk operation 
+
+1 native sql 
+2 hql
+3 criteria (depricated only select operation )
+
+NATIVE SQL :
+all crud operation low level sql query 
+  hql : no inseet but you can copuy data from one table to another
+   uses hiber 5 for complete notes

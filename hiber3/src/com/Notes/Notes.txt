@@ -1,0 +1,25 @@
+⚖️ Difference Between load() and get()
+In Hibernate, both load() and get() methods are used to fetch an object from the database using its primary key, but they work differently. The get() method hits the database immediately and returns the actual entity object. If the object does not exist, it simply returns null. In contrast, the load() method returns a proxy object without immediately hitting the database. The actual database call happens only when a method is invoked on the proxy object. If the record does not exist, load() throws an ObjectNotFoundException. Therefore, load() is generally preferred when you are certain that the object exists in the database, as it is more performance-efficient due to delayed DB access. However, get() is safer when there's uncertainty about the data's existence.
+
+🧠 First-Level Cache in Hibernate
+Hibernate uses a concept called first-level cache, which is associated with the Session object and enabled by default. Every session has its own cache memory. When you fetch data for the first time using methods like get() or load(), Hibernate queries the database and stores the object in this cache. If you fetch the same object again within the same session, Hibernate retrieves it from the cache instead of querying the database again, which enhances performance. This caching works well for small-scale operations, but during bulk operations, memory usage increases significantly as every fetched object is stored in the session cache. If the memory is overloaded, it can lead to performance issues or even crashes. To manage this, Hibernate provides cache clearing mechanisms.
+
+🧹 Managing Cache During Bulk Operations
+When performing bulk operations (like inserting or updating thousands of rows), it’s essential to manage the session cache to prevent memory overflow. Hibernate provides methods like session.clear() to completely clear the session cache, or session.evict(object) to remove a specific object from the cache. Another method, session.contains(object), helps check whether a particular object is still present in the cache. In bulk scenarios, it is a good practice to periodically clear the session (e.g., after every 20-30 records) to free up memory and avoid application crashes.
+
+🔄 Dirty Checking (Automatic Update)
+Hibernate provides a mechanism called dirty checking, which automatically detects changes made to persistent objects. When you modify a field in a fetched object, Hibernate compares the current object state with the original snapshot stored in the session cache. If it detects a change, it automatically generates an UPDATE SQL statement at the time of committing the transaction or flushing the session, even without explicitly calling session.update(). While this feature simplifies update logic, it can become a bottleneck in bulk operations, where thousands of objects may be loaded and compared in memory, consuming resources and reducing efficiency. In such cases, explicitly managing session state and clearing cache frequently is recommended.
+
+🟠 Stateless Session in Hibernate
+To overcome the limitations of first-level caching and dirty checking in bulk operations, Hibernate offers stateless sessions. A stateless session does not maintain a first-level cache, nor does it perform dirty checking, cascade operations, or automatic versioning. It is ideal for situations where performance is critical and cache overhead must be avoided, such as bulk inserts, updates, or deletes. Stateless sessions are faster and more lightweight than regular sessions, but they require explicit management of all operations, as Hibernate won’t automatically track or persist changes.
+
+✅ Summary (Key Interview Points)
+Use get() when unsure about data presence; load() when you’re sure.
+
+First-level cache improves performance but can lead to memory issues during bulk operations.
+
+Use session.clear() or session.evict(obj) to manage cache.
+
+Dirty checking auto-detects object changes but can cause high memory usage in large updates.
+
+Use stateless sessions for optimized, high-volume database operations.
