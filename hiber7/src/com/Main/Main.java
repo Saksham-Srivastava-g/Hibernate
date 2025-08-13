@@ -1,17 +1,11 @@
 package com.Main;
-
-
-
-import java.time.LocalDateTime;
-
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.Transaction;
 import org.hibernate.cfg.Configuration;
 
 import com.Entity.Account;
-import com.Entity.Car;
-import com.Entity.Company;
+
 import com.Entity.Employee;
 
 
@@ -24,14 +18,15 @@ public class Main {
 
         Configuration cfg = new Configuration();
         cfg.addAnnotatedClass(Employee.class);
-        
+        cfg.addAnnotatedClass(Account.class);
         SessionFactory factory = cfg.buildSessionFactory();
         Session session = factory.openSession();
 
         System.out.println("✅ Hibernate connection established");
 
-        insert(session);
-//        readHql(session);
+//        insert(session);
+//          readFromEmployee(session);
+          readFromAccount(session);
 //        update(session);
 //        delete(session);
 
@@ -41,26 +36,36 @@ public class Main {
 
     public static void insert(Session session) {
         Transaction transaction = session.beginTransaction();
-         Account account = new Account("123456","saksham","kanpur","sbi","SBIN999");
-         Car car = new Car("dl998","nanital",LocalDateTime.now(),233);
-         Company company = new Company("2234","google","policy only",account);
-         Employee employee = new Employee("2345","saksham",company,car);
-          session.save(employee);
+         Account account = new Account("121abc","rajuacc","kanpur","Sbi","acbcdefgh");
+         Employee employee = new Employee("eid1234","raju",account);
+         account.setEmployee(employee);
+         session.save(employee);
         transaction.commit();
         System.out.println("✅ Inserted");
     }
 
-    public static void readSql(Session session) {
+    public static void readFromEmployee(Session session) {
+    	Employee employee = session.get(Employee.class,"eid1234");
+    	System.out.println(employee);
     	
-    	
+
         
     }
-   public static void readHql(Session session) {
+   public static void readFromAccount(Session session) {
+	   Account account = session.get(Account.class,"121abc");
+	   System.out.println(account.getAccNo());
+	   System.out.println(account.getAccountHolderAddress());
+	   System.out.println(account.getAccountHolderAddress());
+	   System.out.println(account.getBankName());
+	   System.out.println(account.getIfsc() );
 	   
+	   System.out.println(account.getEmployee().getEmployeeId());
+	   System.out.println(account.getEmployee().getEmployeeName());
+		 
 	 
     }
 
-
+ 
     public static void update(Session session) {
          
     }

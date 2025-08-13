@@ -1,0 +1,33 @@
+
+`hibernate mappings 
+
+in one to one mapping we solve problem that can be in emebbed that for examplea a person
+can have multiple bank account by one to many or hibernate mapping we can create another table with 
+accont ehre eid is passed a foreign key in another table.
+   types of mapping 
+   1 one to one
+   2 one to many
+   3 many to one 
+   4 many to many
+   
+   
+   ONE TO ONE 
+   in unidirectional there will foreign in emp table with acc number to link where the account details are stored
+   cascading : if there is change in parent mapped class all changed 
+   propertes : casacade.all (any crud performed on all mapped) , cascade.remove(in only delete all apped tbale will be affected)
+   in unidirectionl if we get read data from account we cant get employee data and vice versa
+   
+   
+   so we need bidirectional 
+   
+   a way of creating birection we can also add emp filed in account and apply type
+    of mapping like one to one then cascade but for reading we need to create tostring that can cause tostring overstack boh of them is callin geach other
+    
+    
+    ONE TO MANY 
+      
+      
+      mappedby Property
+      
+      we can elimanete another foregn key from one table  
+      

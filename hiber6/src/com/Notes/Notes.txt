@@ -1,3 +1,1 @@
 Embedded and embeddable and version annotation
-
-`
